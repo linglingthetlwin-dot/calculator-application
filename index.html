@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>DisasterApp – Phone Prototype</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{--bg:#eef0f6;--fg:#1a1d26;--mut:#6b7280;--card:#fff;--bd:#e3e6ee;--ac:#e5383b;--ac2:#ff7b3a;--red:#e5383b;--yel:#f4a300;--grn:#12a150;--blu:#3b6df0;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d0f14;--fg:#eceef4;--mut:#9aa1b0;--card:#1a1d26;--bd:#2b303c}}
+:root[data-theme="dark"]{--bg:#0d0f14;--fg:#eceef4;--mut:#9aa1b0;--card:#1a1d26;--bd:#2b303c}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:radial-gradient(circle at 20% 0,#ffd9cf55,transparent 40%),var(--bg);color:var(--fg);font:14px system-ui,sans-serif;padding:16px;text-align:center}
+.cap{font-size:12px;color:var(--mut);margin:4px 0 12px}
+.hide{display:none!important}
+.phone{width:360px;height:740px;max-width:100%;margin:auto;border:10px solid #14161c;border-radius:42px;background:var(--bg);position:relative;overflow:hidden;text-align:left;display:flex;flex-direction:column;box-shadow:0 20px 50px #0004}
+.sb{height:26px;background:#b3262a;color:#fff;font-size:11px;display:flex;justify-content:space-between;padding:6px 16px}
+.hd{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;padding:12px 16px 16px}
+.hd h1{margin:0;font-size:19px}.hd p{margin:2px 0 0;font-size:12px;opacity:.9}
+.seg{display:flex;background:#0003;border-radius:12px;padding:3px;margin-top:12px}
+.seg button{flex:1;background:none;color:#fff;border:0;padding:8px;border-radius:9px;font:600 13px system-ui;cursor:pointer;transition:.2s}
+.seg button.on{background:#fff;color:var(--ac)}
+.net{float:right;display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer}
+.sw{width:36px;height:20px;border-radius:10px;background:#0005;position:relative;transition:.2s}.sw:after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:.2s}
+.net.on .sw{background:#12a150}.net.on .sw:after{left:18px}
+.pg{padding:14px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:12px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:12px;box-shadow:0 2px 8px #0000000d}
+.lbl{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--mut);text-transform:uppercase;margin-bottom:8px}
+input{width:100%;font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:10px;margin-bottom:8px}
+input:focus{outline:2px solid var(--ac2)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--bd);background:var(--card);color:var(--fg);border-radius:20px;padding:8px 12px;font:600 13px system-ui;cursor:pointer;transition:.15s}
+.chip:hover{transform:translateY(-1px)}.chip.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.stp{display:flex;align-items:center;gap:14px}.stp button{width:36px;height:36px;border-radius:50%;border:0;background:var(--bg);color:var(--fg);font-size:20px;cursor:pointer;border:1px solid var(--bd)}.stp b{font-size:20px;min-width:24px;text-align:center}
+.gps{display:flex;align-items:center;gap:12px;cursor:pointer}
+.pin{width:42px;height:42px;border-radius:50%;background:#3b6df022;display:grid;place-items:center;font-size:20px;position:relative}
+.pin.ok{background:#12a15022;animation:pulse 1.6s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 #12a15066}100%{box-shadow:0 0 0 14px #12a15000}}
+.big{border:0;border-radius:16px;padding:15px;font:700 16px system-ui;color:#fff;background:linear-gradient(135deg,var(--ac),var(--ac2));cursor:pointer;box-shadow:0 6px 16px #e5383b55;transition:.15s}
+.big:active{transform:scale(.97)}
+.msg{font-size:13px;text-align:center;min-height:18px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{border-radius:14px;padding:10px;color:#fff;text-align:center;cursor:pointer;transition:.15s}.stat b{display:block;font-size:22px}.stat span{font-size:11px;opacity:.95}
+.stat.on{outline:3px solid var(--fg);outline-offset:1px}
+.Red{background:var(--red)}.Yellow{background:var(--yel)}.Green{background:var(--grn)}
+svg.map{width:100%;display:block;border-radius:12px;background:linear-gradient(#dfeafe,#cfe0fb)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) svg.map{background:linear-gradient(#17233d,#12203a)}}
+.dot{animation:blink 1.4s infinite}@keyframes blink{50%{opacity:.45}}
+.req{border-left:5px solid var(--bd);cursor:pointer;transition:.15s}.req:hover{transform:translateX(2px)}
+.req.Red{border-left-color:var(--red);background:var(--card)}.req.Yellow{border-left-color:var(--yel);background:var(--card)}.req.Green{border-left-color:var(--grn);background:var(--card)}
+.rt{display:flex;justify-content:space-between;align-items:center}.rt b{font-size:15px}
+.pill{font-size:11px;font-weight:700;padding:3px 9px;border-radius:10px;color:#fff;background:var(--blu)}
+.st-Verified{background:#7c4dff}.st-Dispatched{background:#f57c00}.st-Rescued{background:var(--grn)}.st-Falsereport{background:#8a90a0}
+.sub{font-size:12px;color:var(--mut);margin-top:3px}
+.nav{height:20px;display:grid;place-items:center;background:var(--bg)}.nav i{width:100px;height:4px;border-radius:2px;background:var(--bd)}
+.sheet{position:absolute;inset:0;background:#0007;display:flex;align-items:flex-end;z-index:5}
+.sheet>div{background:var(--card);width:100%;padding:14px;border-radius:22px 22px 0 0;display:flex;flex-direction:column;gap:8px;animation:up .25s}
+@keyframes up{from{transform:translateY(100%)}}
+.sheet button{border:1px solid var(--bd);background:var(--bg);color:var(--fg);padding:12px;border-radius:12px;font:600 14px system-ui;cursor:pointer}
+.sheet button.cl{background:var(--fg);color:var(--bg)}
+.toast{position:absolute;left:14px;right:14px;bottom:34px;background:#14161c;color:#fff;padding:12px;border-radius:12px;font-size:13px;z-index:9;animation:up .25s}
+</style></head><body>
+<div class="cap">.NET MAUI app · 360 × 740 dp phone frame · tap everything — it all works</div>
+<div class="phone">
+ <div class="sb"><span>9:41</span><span>▲ ◉ ▮▮▮</span></div>
+ <div class="hd"><label class="net on" id="net" data-a="net"><span id="nl">Online</span><span class="sw"></span></label>
+  <h1>🆘 Disaster Assist</h1><p>Report an emergency · track rescue</p>
+  <div class="seg"><button class="on" data-a="tv">Victim</button><button data-a="tc">Coordinator</button></div></div>
+ <div class="pg" id="vv">
+  <div class="card"><div class="lbl">Who needs help</div><input id="nm" placeholder="Name"><input id="ph" placeholder="Phone" type="tel" style="margin:0"></div>
+  <div class="card"><div class="lbl">Emergency type</div><div class="chips" id="types"></div></div>
+  <div class="card"><div class="lbl">Number of people</div><div class="stp"><button data-a="minus">−</button><b id="n">1</b><button data-a="plus">+</button></div>
+   <div class="lbl" style="margin-top:12px">Special care</div><div class="chips" id="care"></div></div>
+  <div class="card gps" data-a="gps"><div class="pin" id="pin">📍</div><div><b id="gt">Tap to capture GPS</b><div class="sub" id="gs">Required so rescuers can find you</div></div></div>
+  <button class="big" data-a="send">SEND REQUEST</button><div class="msg" id="ms"></div>
+ </div>
+ <div class="pg hide" id="cv">
+  <div class="stats" id="stats"></div>
+  <div class="card" style="padding:8px"><svg class="map" viewBox="0 0 100 56" id="map"></svg></div>
+  <div id="ls" style="display:flex;flex-direction:column;gap:10px"></div>
+ </div>
+ <div class="nav"><i></i></div>
+ <div id="sh" class="sheet hide" data-a="close"><div id="shb"></div></div>
+ <div id="toast" class="toast hide"></div>
+</div>
+<script>
+const $=i=>document.getElementById(i);
+const TYPES=['🆘 Trapped / Rescue','🩺 Medical','💧 Food / Water','🚤 Evacuation'],CARE=['🛏 Bedridden','👶 Infant','👵 Elderly'];
+const score=(t,n,c)=>c.length||/Medical|Trapped/.test(t)?'Red':n>=4||/Evacuation/.test(t)?'Yellow':'Green';
+const S={type:TYPES[0],n:1,care:[],pos:null,online:true,flt:'All',q:[],db:[]};
+[['Somchai K.','081-234-5678',TYPES[0],5,['🛏 Bedridden'],18.77,100.76,'New'],['Malee P.','086-111-2222',TYPES[1],2,['👶 Infant'],18.74,100.80,'Verified'],
+ ['Prasert W.','089-555-0101',TYPES[2],3,[],18.81,100.73,'Dispatched'],['Nok S.','082-909-7788',TYPES[3],6,[],18.79,100.79,'New']]
+ .forEach((r,i)=>S.db.push({id:i+1,name:r[0],phone:r[1],type:r[2],ppl:r[3],care:r[4],lat:r[5],lon:r[6],status:r[7],score:score(r[2],r[3],r[4])}));
+function toast(t){const e=$('toast');e.textContent=t;e.classList.remove('hide');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.add('hide'),2200)}
+function chips(){$('types').innerHTML=TYPES.map(t=>`<button class="chip ${S.type==t?'on':''}" data-a="type" data-v="${t}">${t}</button>`).join('');
+ $('care').innerHTML=CARE.map(t=>`<button class="chip ${S.care.includes(t)?'on':''}" data-a="care" data-v="${t}">${t}</button>`).join('')}
+function tab(v){$('vv').classList.toggle('hide',!v);$('cv').classList.toggle('hide',!!v);
+ document.querySelectorAll('.seg button').forEach((b,i)=>b.classList.toggle('on',v?i==0:i==1));if(!v)draw()}
+function sync(){if(!S.online||!S.q.length)return;S.db.push(...S.q);S.q=[];$('ms').textContent='✅ Request received by coordinators.';draw()}
+function send(){if(!S.pos){$('ms').textContent='⚠️ Please capture your GPS first.';return}
+ const c=S.care.slice();S.q.push({id:S.db.length+S.q.length+1,name:$('nm').value||'Unknown',phone:$('ph').value,type:S.type,ppl:S.n,care:c,lat:S.pos[0],lon:S.pos[1],status:'New',score:score(S.type,S.n,c)});
+ $('ms').textContent=S.online?'':'📴 Offline: saved on device, will sync automatically.';sync();toast(S.online?'Request sent!':'Saved offline')}
+function draw(){const cnt=k=>S.db.filter(r=>r.score==k).length,o={Red:0,Yellow:1,Green:2};
+ $('stats').innerHTML=['Red','Yellow','Green'].map(k=>`<div class="stat ${k} ${S.flt==k?'on':''}" data-a="flt" data-v="${k}"><b>${cnt(k)}</b><span>${k}</span></div>`).join('');
+ const rows=S.db.filter(r=>S.flt=='All'||r.score==S.flt).sort((a,b)=>o[a.score]-o[b.score]);
+ $('map').innerHTML='<path d="M0 40 Q25 30 45 38 T100 28 V34 Q70 42 45 44 T0 46Z" fill="#7fb2f0" opacity=".6"/>'+[20,40,60,80].map(x=>`<path d="M${x} 0V56" stroke="#fff" opacity=".35" stroke-width=".3"/>`).join('')+
+  rows.map(r=>{const x=Math.min(96,Math.max(4,(r.lon-100.70)/.14*100)),y=Math.min(52,Math.max(4,(1-(r.lat-18.70)/.14)*56)),c={Red:'#e5383b',Yellow:'#f4a300',Green:'#12a150'}[r.score];
+  return `<circle class="dot" cx="${x}" cy="${y}" r="3.2" fill="${c}" stroke="#fff" stroke-width=".8"/>`}).join('');
+ $('ls').innerHTML=rows.map(r=>`<div class="card req ${r.score}" data-a="pick" data-id="${r.id}"><div class="rt"><b>#${r.id} ${r.name}</b><span class="pill st-${r.status.replace(' ','')}">${r.status}</span></div>
+  <div class="sub">${r.type} · ${r.ppl} people</div><div class="sub">${r.care.join(' ')||'No care flag'} · ${r.score} priority</div></div>`).join('')||'<div class="sub">No requests yet.</div>'}
+function pick(id){const r=S.db.find(x=>x.id==id);$('sh').classList.remove('hide');
+ $('shb').innerHTML=`<b style="font-size:16px">#${r.id} ${r.name} — ${r.score}</b><div class="sub">${r.phone||'no phone'}</div>`+['📞 Call','Verified','Dispatched','Rescued','False report'].map(a=>`<button data-a="act" data-v="${a}" data-id="${id}">${a}</button>`).join('')+'<button class="cl" data-a="close">Close</button>'}
+document.addEventListener('click',e=>{const t=e.target.closest('[data-a]');if(!t)return;const a=t.dataset.a,v=t.dataset.v;
+ if(a=='close'&&e.target.closest('#shb')&&t.id=='sh')return;
+ if(a=='tv')tab(1);else if(a=='tc')tab(0);
+ else if(a=='net'){e.preventDefault();S.online=!S.online;t.classList.toggle('on',S.online);$('nl').textContent=S.online?'Online':'Offline';sync();toast(S.online?'Back online':'Offline mode')}
+ else if(a=='type'){S.type=v;chips()}
+ else if(a=='care'){S.care=S.care.includes(v)?S.care.filter(x=>x!=v):[...S.care,v];chips()}
+ else if(a=='minus'){S.n=Math.max(1,S.n-1);$('n').textContent=S.n}else if(a=='plus'){S.n++;$('n').textContent=S.n}
+ else if(a=='gps'){S.pos=[18.72+Math.random()*.1,100.72+Math.random()*.1];$('pin').className='pin ok';$('gt').textContent=`${S.pos[0].toFixed(4)}, ${S.pos[1].toFixed(4)}`;$('gs').textContent='Location captured ✓'}
+ else if(a=='send')send();
+ else if(a=='flt'){S.flt=S.flt==v?'All':v;draw()}
+ else if(a=='pick')pick(t.dataset.id);
+ else if(a=='act'){const r=S.db.find(x=>x.id==t.dataset.id);$('sh').classList.add('hide');if(v=='📞 Call')toast('📞 Dialing '+(r.phone||'(no number)'));else{r.status=v;toast('Status → '+v)}draw()}
+ else if(a=='close')$('sh').classList.add('hide')});
+chips();
+</script></body></html>
